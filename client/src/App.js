@@ -2,12 +2,15 @@ import React, { Component } from 'react';
 import './App.css';
 
 class App extends Component {
-  // Initialize state
-  state = { passwords: [] }
+  state = { 
+    passwords: [],
+    kittens: []
+  }
 
   // Fetch passwords after first mount
   componentDidMount() {
-    this.getPasswords();
+    this.getKittens();
+    // this.getPasswords();
   }
 
   getPasswords = () => {
@@ -17,15 +20,21 @@ class App extends Component {
       .then(passwords => this.setState({ passwords }));
   }
 
+  getKittens = () => {
+    fetch('/api/kittens')
+      .then(res => res.json())
+      .then(kittens => this.setState({ kittens }));
+  }
+
   render() {
-    const { passwords } = this.state;
+    const { passwords, kittens } = this.state;
 
     return (
       <div className="App">
         {/* Render the passwords if we have them */}
-        {passwords.length ? (
+        {kittens.length ? (
           <div>
-            <h1>5 Passwords.</h1>
+            <h1>5 Cats.</h1>
             <ul className="passwords">
               {/*
                 Generally it's bad to use "index" as a key.
@@ -33,9 +42,9 @@ class App extends Component {
                 be the same number of passwords, and they never
                 change positions in the array.
               */}
-              {passwords.map((password, index) =>
+              {kittens.map((kitten, index) =>
                 <li key={index}>
-                  {password}
+                  {kitten}
                 </li>
               )}
             </ul>
