@@ -4,7 +4,8 @@ import './App.css';
 class App extends Component {
   state = { 
     passwords: [],
-    kittens: []
+    animals: [],
+    animalType: 'dogs',
   }
 
   // Fetch passwords after first mount
@@ -20,51 +21,49 @@ class App extends Component {
       .then(passwords => this.setState({ passwords }));
   }
 
+  getAnimals = () => {
+    if (this.state.animalType === 'dogs'){
+      this.getDogs();
+      this.setState({ animalType: 'cats'});
+    } else {
+      this.getKittens();
+      this.setState({ animalType: 'dogs'});
+    }
+  }
+
   getKittens = () => {
     fetch('/api/kittens')
       .then(res => res.json())
-      .then(kittens => this.setState({ kittens }));
+      .then(kittens => this.setState({ animals: kittens['data'].children}));
+  }
+
+  getDogs = () => {
+    fetch('/api/dogs')
+      .then(res => res.json())
+      .then(dogs => this.setState({ animals: dogs['data'].children}));
   }
 
   render() {
-    const { passwords, kittens } = this.state;
+    const { passwords, animals } = this.state;
 
     return (
       <div className="App">
         {/* Render the passwords if we have them */}
-        {kittens.length ? (
           <div>
-            <h1>5 Cats.</h1>
+            <h1>these are not {this.state.animalType}</h1>
             <ul className="passwords">
-              {/*
-                Generally it's bad to use "index" as a key.
-                It's ok for this example because there will always
-                be the same number of passwords, and they never
-                change positions in the array.
-              */}
-              {kittens.map((kitten, index) =>
+              {animals.map((animal, index) =>
                 <li key={index}>
-                  {kitten}
+                  <img src={animal['data'].url} width="500px" />
                 </li>
               )}
             </ul>
             <button
               className="more"
-              onClick={this.getPasswords}>
-              Get More
+              onClick={this.getAnimals} >
+              Show me {this.state.animalType}
             </button>
           </div>
-        ) : (
-          // Render a helpful message otherwise
-          <div>
-            <h1>No passwords :(</h1>
-            <button
-              className="more"
-              onClick={this.getPasswords}>
-              Try Again?
-            </button>
-          </div>
-        )}
       </div>
     );
   }

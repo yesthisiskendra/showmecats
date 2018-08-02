@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const request = require('request');
 const generatePassword = require('password-generator')
 
 const app = express();
@@ -16,8 +17,23 @@ app.get('/api/passwords', (req, res) => {
 });
 
 app.get('/api/kittens', (req, res) => {
-	const kittens = ["Fluffy", "Snowball", "Mr. Purr", "Tuna", "Gary"];
-	res.json(kittens);
+	request.get("https://www.reddit.com/r/MildlyStartledCats.json", (error, response, body) => {
+    if(error) {
+        return console.dir(error);
+    }
+    const newBody = JSON.parse(body);
+    res.json(newBody);
+});
+});
+
+app.get('/api/dogs', (req, res) => {
+	request.get("https://www.reddit.com/r/dogswearinghats.json", (error, response, body) => {
+    if(error) {
+        return console.dir(error);
+    }
+    const newBody = JSON.parse(body);
+    res.json(newBody);
+});
 });
 
 app.get('*', (res, req) => {
