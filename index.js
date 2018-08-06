@@ -1,20 +1,10 @@
 const express = require('express');
 const path = require('path');
 const request = require('request');
-const generatePassword = require('password-generator')
 
 const app = express();
 
 app.use(express.static(path.join(__dirname, 'client/build')));
-
-app.get('/api/passwords', (req, res) => { 
-	const count = 5;
-  	const passwords = Array.from(Array(count).keys()).map(i =>
-    		generatePassword(12, false)
- 	)	
-	res.json(passwords);
-	console.log(`Sent ${count} passwords`);
-});
 
 app.get('/api/kittens', (req, res) => {
 	request.get("https://www.reddit.com/r/MildlyStartledCats.json", (error, response, body) => {

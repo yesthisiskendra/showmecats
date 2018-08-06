@@ -3,22 +3,12 @@ import './App.css';
 
 class App extends Component {
   state = { 
-    passwords: [],
     animals: [],
     animalType: 'dogs',
   }
 
-  // Fetch passwords after first mount
   componentDidMount() {
     this.getKittens();
-    // this.getPasswords();
-  }
-
-  getPasswords = () => {
-    // Get the passwords and store them in state
-    fetch('/api/passwords')
-      .then(res => res.json())
-      .then(passwords => this.setState({ passwords }));
   }
 
   getAnimals = () => {
@@ -44,25 +34,24 @@ class App extends Component {
   }
 
   render() {
-    const { passwords, animals } = this.state;
+    const { animals } = this.state;
 
     return (
       <div className="App">
-        {/* Render the passwords if we have them */}
           <div>
             <h1>these are not {this.state.animalType}</h1>
-            <ul className="passwords">
+            <button
+              className="more"
+              onClick={this.getAnimals} >
+              Show me {this.state.animalType}
+            </button>
+            <ul className="animals">
               {animals.map((animal, index) =>
                 <li key={index}>
                   <img src={animal['data'].url} width="500px" />
                 </li>
               )}
             </ul>
-            <button
-              className="more"
-              onClick={this.getAnimals} >
-              Show me {this.state.animalType}
-            </button>
           </div>
       </div>
     );
